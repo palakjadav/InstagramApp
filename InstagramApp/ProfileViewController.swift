@@ -7,9 +7,24 @@
 //
 
 import UIKit
+import Parse
 
 class ProfileViewController: UIViewController {
 
+    @IBAction func onLogOutButton(_ sender: Any) {
+        
+        // Log the user out of the backend
+        PFUser.logOutInBackground { (error: Error?) in
+            // If no error, return user to the login view controller
+            if error == nil {
+                self.performSegue(withIdentifier: "logoutSegue", sender: nil)
+            } else {
+                print("Error logging out")
+            }
+            
+        }
+
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
 

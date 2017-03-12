@@ -38,7 +38,7 @@ class CaptureViewController: UIViewController, UIImagePickerControllerDelegate, 
         // Do something with the images (based on your use case)
         //        image = editedImage
         image = originalImage
-        addPhotoImageView.image = image
+       addPhotoImageView.image = image
         
         // Dismiss UIImagePickerController to go back to your original view controller
         dismiss(animated: true, completion: nil)

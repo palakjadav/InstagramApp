@@ -20,11 +20,40 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.dataSource = self
         tableView.delegate = self
         
+        let refreshControl = UIRefreshControl()
+       refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), for: UIControlEvents.valueChanged)
+       // refreshControl.addTarget(self, action: #selector(refreshControlAction(_refreshControl:)), for: UIControlEvents.valueChanged)
+        tableView.insertSubview(refreshControl, at: 0)
         // Get timeline with network call
-        networkCall()
+        //networkCall()
+        self.tableView.reloadData()
 
     }
     
+    func refreshControlAction(_ refreshControl: UIRefreshControl) {
+        
+        let query = PFQuery(className: "Post")
+        query.order(byDescending: "createdAt")
+        query.limit = 20
+        
+        // Look through Parse
+        query.findObjectsInBackground { (posts: [PFObject]?, error: Error?) in
+            
+            if let posts =  posts {
+                print("We got some posts")
+                self.posts = posts
+                self.tableView.reloadData()
+                refreshControl.endRefreshing()
+            } else {
+                print("Error fetching timeline in function networkCall(): \(error!.localizedDescription)")
+            }
+            
+            // Tell the refreshControl to stop spinning
+            refreshControl.endRefreshing()
+        }
+        //task.resume()
+    }
+    /*
     func networkCall() {
     
     let query = PFQuery(className: "Post")
@@ -43,7 +72,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     }
     
-    }
+    }*/
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         print("Count returned: ", self.posts?.count ?? 0)
