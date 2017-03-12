@@ -7,15 +7,25 @@
 //
 
 import UIKit
+import Parse
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        Parse.initialize(
+            with: ParseClientConfiguration(block: { (configuration:ParseMutableClientConfiguration) -> Void in
+                configuration.applicationId = "Instagram"
+                configuration.clientKey = nil  // set to nil assuming you have not set clientKey
+                configuration.server = "https://glacial-sea-47573.herokuapp.com/parse"
+            })
+        )
+        
+        if PFUser.current() != nil {
+            // if there is a logged in user then load the home view controller
+        }
+
         return true
     }
 
